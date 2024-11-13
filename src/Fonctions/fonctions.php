@@ -11,37 +11,26 @@ function GenereMDP($nbChar) :string{
     return "secret";
 }
 
-function CalculComplexiteMdp($mdp) : int {
-        $complexite = 0;
-
-        // Vérifie la longueur du mot de passe
+    function CalculComplexiteMdp($mdp): float {
         $longueur = strlen($mdp);
-        if ($longueur >= 8) {
-            $complexite += 2;
-        }
-        if ($longueur >= 12) {
-            $complexite += 2;
-        }
+        $ensemble = 0;
 
-        // Vérifie la présence de majuscules
-        if (preg_match('/[A-Z]/', $mdp)) {
-            $complexite += 2;
-        }
-
-        // Vérifie la présence de minuscules
+        // Vérifie les différents types de caractères et ajuste la taille de l'ensemble
         if (preg_match('/[a-z]/', $mdp)) {
-            $complexite += 2;
+            $ensemble += 26; // Lettres minuscules
         }
-
-        // Vérifie la présence de chiffres
+        if (preg_match('/[A-Z]/', $mdp)) {
+            $ensemble += 26; // Lettres majuscules
+        }
         if (preg_match('/[0-9]/', $mdp)) {
-            $complexite += 2;
+            $ensemble += 10; // Chiffres
         }
-
-        // Vérifie la présence de caractères spéciaux
         if (preg_match('/[\W_]/', $mdp)) {
-            $complexite += 2;
+            $ensemble += 32; // Caractères spéciaux (approximatif)
         }
 
-        return $complexite;
+        // Calcul de l'entropie
+        $entropie = $longueur * log($ensemble, 2);
+
+        return $entropie;
     }

@@ -1,5 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use function App\Fonctions\CalculComplexiteMdp;
+
 require_once ("src/Fonctions/fonctions.php");
 class CalculComplexiteMdpTest extends TestCase
 {
@@ -29,3 +31,4 @@ class CalculComplexiteMdpTest extends TestCase
 
 
 }
+echo CalculComplexiteMdp("aubry");
