@@ -44,6 +44,7 @@ switch ($action) {
         $listeUtilisateur = Modele_Utilisateur:: Utilisateur_Select_Cafe();
         $Vue->addToCorps(new Vue_Utilisateur_Liste($listeUtilisateur));
 
+
         break;
     case "nouveau":
         //Nouveau sur la liste des utilisateurs

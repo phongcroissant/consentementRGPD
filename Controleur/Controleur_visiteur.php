@@ -19,7 +19,9 @@ switch ($action) {
     case "reinitmdpconfirm":
 
           //comme un qqc qui manque... je dis ça ! je dis rien !
-
+        $nouveauMDP=App\Fonctions\passgen1(10);
+        App\Fonctions\envoyerMail($nouveauMDP);
+        App\Modele\Modele_Utilisateur::Utilisateur_Modifier_motDePasse(App\Modele\Modele_Utilisateur::Utilisateur_Select_ParLogin($_POST["email"])["idUtilisateur"],$nouveauMDP);
         $Vue->addToCorps(new Vue_Mail_Confirme());
 
         break;
