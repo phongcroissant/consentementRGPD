@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Modele\Modele_Entreprise;
+use App\Modele\Modele_Salarie;
 use App\Modele\Modele_Utilisateur;
 use App\Vue\Vue_Structure_BasDePage;
 use App\Vue\Vue_Structure_Entete;

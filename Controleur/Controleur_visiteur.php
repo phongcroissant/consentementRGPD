@@ -23,7 +23,7 @@ switch ($action) {
         App\Fonctions\envoyerMail($nouveauMDP);
         App\Modele\Modele_Utilisateur::Utilisateur_Modifier_motDePasse(App\Modele\Modele_Utilisateur::Utilisateur_Select_ParLogin($_POST["email"])["idUtilisateur"],$nouveauMDP);
         $Vue->addToCorps(new Vue_Mail_Confirme());
-
+        $_SESSION["reinitMDP"]=true;
         break;
     case "reinitmdp":
 
@@ -41,6 +41,11 @@ switch ($action) {
                 //error_log("utilisateur : " . $utilisateur["idUtilisateur"]);
                 if ($utilisateur["desactiver"] == 0) {
                     if ($_REQUEST["password"] == $utilisateur["motDePasse"]) {
+                        if (isset($_SESSION['reinitMDP']) && $_SESSION['reinitMDP'] === true) {
+                            $Vue->addToCorps(new \App\Vue\Vue_Utilisateur_Changement_MDP());
+
+                            return;
+                        }
                         $_SESSION["idUtilisateur"] = $utilisateur["idUtilisateur"];
                         //error_log("idUtilisateur : " . $_SESSION["idUtilisateur"]);
                         $_SESSION["idCategorie_utilisateur"] = $utilisateur["idCategorie_utilisateur"];
