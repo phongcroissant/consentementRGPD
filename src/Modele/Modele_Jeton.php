@@ -33,5 +33,34 @@ class Modele_Jeton
         }
         throw new \Exception("Non");
     }
+    public static function updateToken($jeton)
+    {
+        $connexionPDO = Singleton_ConnexionPDO::getInstance();
+        $requetePreparee = $connexionPDO->prepare('
+            UPDATE token 
+            SET codeAction = 0 
+            WHERE valeur = :valeurJeton AND dateFin > NOW()'
+        );
 
+        $requetePreparee->bindParam(':valeurJeton', $jeton);
+
+        if (!$requetePreparee->execute()) {
+            throw new \Exception("Échec de la mise à jour du jeton.");
+        }
+    }
+
+    // Méthode Search pour rechercher un jeton selon sa valeur
+    public static function researchToken($jeton)
+    {
+        $connexionPDO = Singleton_ConnexionPDO::getInstance();
+        $requetePreparee = $connexionPDO->prepare('
+            SELECT * FROM token 
+            WHERE valeur = :valeurJeton AND dateFin > NOW()'
+        );
+
+        $requetePreparee->bindParam(':valeurJeton', $jeton);
+        $requetePreparee->execute();
+
+        return $requetePreparee->fetch(PDO::FETCH_ASSOC);
+    }
 }
