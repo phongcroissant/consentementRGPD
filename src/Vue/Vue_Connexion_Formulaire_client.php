@@ -48,6 +48,18 @@ class Vue_Connexion_Formulaire_client extends Vue_Composant
 
         $str .= "
 </form>
+</form>
+<form>
+
+<h1>Mot de passe perdu ?</h1>
+
+<button type='submit' id='submit' name='action' value='reinitmdptoken'> 
+    Réinitialiser le mdp par token
+</button>
+";
+
+        $str .= "
+</form>
 </div>
     ";
 

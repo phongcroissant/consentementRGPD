@@ -69,3 +69,27 @@ function GenereMDP($nbChar) :string{
         }
         echo $msg;
     }
+    function envoyerMailToken($token) {
+        $mail = new PHPMailer;
+        $mail->isSMTP();
+        $mail->Host = '127.0.0.1';
+        $mail->Port = 1025; //Port non crypté
+        $mail->SMTPAuth = false; //Pas d’authentification
+        $mail->SMTPAutoTLS = false; //Pas de certificat TLS
+        $mail->setFrom('test@labruleriecomtoise.fr', 'admin');
+        $mail->addAddress($_REQUEST["email"], 'Mon client');
+        if ($mail->addReplyTo('test@labruleriecomtoise.fr', 'admin')) {
+            $mail->Subject = 'Objet : Bonjour !';
+            $mail->isHTML(true);
+            $mail->Body = "Veuillez cliquer sur ce lien pour réinitialiser votre mot de passe : <a href='http://localhost:8000/index.php?action=token&token=$token'>Lien à cliquer</a>";
+
+            if (!$mail->send()) {
+                $msg = 'Désolé, quelque chose a mal tourné. Veuillez réessayer plus tard.';
+            } else {
+                $msg = 'Message envoyé ! Merci de nous avoir contactés.';
+            }
+        } else {
+            $msg = 'Il doit manquer qqc !';
+        }
+        echo $msg;
+    }

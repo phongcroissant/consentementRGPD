@@ -6,9 +6,11 @@ use App\Modele\Modele_Utilisateur;
 use App\Vue\Vue_Connexion_Formulaire_client;
 use App\Vue\Vue_Mail_Confirme;
 use App\Vue\Vue_Mail_ReinitMdp;
+use App\Vue\Vue_Mail_ReinitMdpToken;
 use App\Vue\Vue_Menu_Administration;
 use App\Vue\Vue_Structure_BasDePage;
 use App\Vue\Vue_Structure_Entete;
+use App\Vue\Vue_Mail_ChoisirNouveauMdp;
 
 use PHPMailer\PHPMailer\PHPMailer;
 //Ce contrôleur gère le formulaire de connexion pour les visiteurs
@@ -25,12 +27,37 @@ switch ($action) {
         $Vue->addToCorps(new Vue_Mail_Confirme());
         $_SESSION["reinitMDP"]=true;
         break;
+    case "reinitmdpconfirmtoken":
+
+          //comme un qqc qui manque... je dis ça ! je dis rien !
+        $token=App\Modele\Modele_Jeton::insertToken(App\Modele\Modele_Utilisateur::Utilisateur_Select_ParLogin($_POST["email"])["idUtilisateur"]);
+        App\Fonctions\envoyerMailToken(\App\Modele\Modele_Jeton::researchToken($token)["valeur"]);
+//        App\Modele\Modele_Utilisateur::Utilisateur_Modifier_motDePasse(App\Modele\Modele_Utilisateur::Utilisateur_Select_ParLogin($_POST["email"])["idUtilisateur"],$nouveauMDP);
+        $Vue->addToCorps(new Vue_Mail_Confirme());
+        $_SESSION["reinitMDP"]=true;
+        $_SESSION["token"]=$token;
+        break;
     case "reinitmdp":
 
 
         $Vue->addToCorps(new Vue_Mail_ReinitMdp());
 
         break;
+    case "reinitmdptoken":
+
+
+        $Vue->addToCorps(new Vue_Mail_ReinitMdpToken());
+
+        break;
+    case "token":
+        $token=isset($_GET["token"])?$_GET["token"]:"";
+        $Vue->addToCorps(new Vue_Mail_ChoisirNouveauMdp($token));
+        break;
+    case "choixmdp" :
+        $token=isset($_GET["token"])?$_GET["token"]:"";
+        if($_POST["mdp1"]===$_POST["mdp2"]){
+            Modele_Utilisateur::Utilisateur_Modifier_motDePasse(\App\Modele\Modele_Jeton::researchToken($token)["idUtilisateur"],$_POST["mdp1"]);
+        }
     case "Se connecter" :
         if (isset($_REQUEST["compte"]) and isset($_REQUEST["password"])) {
             //Si tous les paramètres du formulaire sont bons
