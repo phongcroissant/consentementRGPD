@@ -34,7 +34,6 @@ switch ($action) {
         App\Fonctions\envoyerMailToken(\App\Modele\Modele_Jeton::researchToken($token)["valeur"]);
 //        App\Modele\Modele_Utilisateur::Utilisateur_Modifier_motDePasse(App\Modele\Modele_Utilisateur::Utilisateur_Select_ParLogin($_POST["email"])["idUtilisateur"],$nouveauMDP);
         $Vue->addToCorps(new Vue_Mail_Confirme());
-        $_SESSION["reinitMDP"]=true;
         $_SESSION["token"]=$token;
         break;
     case "reinitmdp":
@@ -55,9 +54,26 @@ switch ($action) {
         break;
     case "choixmdp" :
         $token=isset($_GET["token"])?$_GET["token"]:"";
-        if($_POST["mdp1"]===$_POST["mdp2"]){
-            Modele_Utilisateur::Utilisateur_Modifier_motDePasse(\App\Modele\Modele_Jeton::researchToken($token)["idUtilisateur"],$_POST["mdp1"]);
-        }
+//        if (\App\Fonctions\CalculComplexiteMdp($_REQUEST["mdp1"])>=90)
+//        {
+//            if ($_REQUEST["mdp1"] == $_REQUEST["mdp2"]) {
+//                $Vue->setEntete(new Vue_Structure_Entete());
+//                $Vue->setMenu(new Vue_Menu_Administration($typeConnexion));
+//                Modele_Utilisateur::Utilisateur_Modifier_motDePasse(\App\Modele\Modele_Jeton::researchToken($token)["idUtilisateur"], $_REQUEST["mdp1"]);
+//                // Dans ce cas les mots de passe sont bons, il est donc modifier
+//
+//            } else {
+//                $Vue->setEntete(new Vue_Structure_Entete());
+//                $Vue->setMenu(new Vue_Menu_Administration($typeConnexion));
+//                $Vue->addToCorps(new Vue_Mail_ChoisirNouveauMdp("<label><b>Les nouveaux mots de passe ne sont pas identiques</b></label>", "Gerer_monCompte"));
+//            }
+//        }else {
+//            $Vue->setEntete(new Vue_Structure_Entete());
+//            $Vue->setMenu(new Vue_Menu_Administration($typeConnexion));
+//            $Vue->addToCorps(new Vue_Mail_ChoisirNouveauMdp("<label><b>Le mot de passe n'est pas assez puissant</b></label>", "Gerer_monCompte"));
+//        }
+//        ça marche pas trop mais dans l'idée c'est censé fonctionner.
+        break;
     case "Se connecter" :
         if (isset($_REQUEST["compte"]) and isset($_REQUEST["password"])) {
             //Si tous les paramètres du formulaire sont bons
